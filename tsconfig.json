@@ -5,13 +5,10 @@
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
-    "moduleResolution": "nodenext",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "target": "es2017",
-    "module": "nodenext",
-    "lib": ["es2020", "dom"]
+    "moduleResolution": "node",
+    "target": "ES2022",
+    "module": "es2022",
+    "lib": ["es2022", "dom"]
   },
   "exclude": ["node_modules"]
 }
-
