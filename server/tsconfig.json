@@ -4,7 +4,10 @@
     "outDir": "../dist/out-tsc/server",
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "module": "nodenext",
+    "moduleResolution": "nodenext"
+
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
