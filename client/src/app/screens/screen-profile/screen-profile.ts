@@ -17,6 +17,7 @@ export class ScreenProfile implements OnInit{
   constructor(private api: APIService){}
 
   ngOnInit(): void {
+    // FIXME transactions displaying delayed (only on second nav click)
     this.api.getTransactions().subscribe({
       next: (transactions) => {
         this.transactions = transactions;

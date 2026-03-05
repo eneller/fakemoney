@@ -19,7 +19,7 @@
     <div class="card-body p-0">
       <div class="list-group list-group-flush">
         <!-- Transaction Item -->
-         @for (transaction of transactions; track transaction.date) {
+         @for (transaction of transactions; track $index) {
         <div class="list-group-item">
           <div class="d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
