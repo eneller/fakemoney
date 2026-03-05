@@ -1,20 +1,15 @@
 <main class="main">
   <router-outlet></router-outlet>
-  
-
-<button type="button" class="btn">Base class</button>
-
-
 </main>
 <nav>
-  <ul ngbNav class="nav-tabs custom-navbar bg-body-secondary">
-    <li ngbNavItem="" class="custom-navitem"><a ngbNavLink routerLink="" routerLinkActive="active">
+  <ul ngbNav [(activeId)]="active" class="nav-tabs custom-navbar bg-body-secondary">
+    <li [ngbNavItem]="1" class="custom-navitem"><a ngbNavLink>
         <i class="bi bi-cash"></i>
     </a></li>
-    <li ngbNavItem="/basic.t" class="custom-navitem"><a ngbNavLink routerLink="/basic.t" routerLinkActive="active">
+    <li [ngbNavItem]="2" class="custom-navitem"><a ngbNavLink>
         <i class="bi bi-piggy-bank"></i>
     </a></li>
-    <li ngbNavItem="/rotations.t" class="custom-navitem"><a ngbNavLink routerLink="/rotations.t" routerLinkActive="active">
+    <li [ngbNavItem]="3" class="custom-navitem"><a ngbNavLink>
         <i class="bi bi-person"></i>
     </a></li>
   </ul>
