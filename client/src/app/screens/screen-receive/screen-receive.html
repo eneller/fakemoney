@@ -10,7 +10,7 @@
           <div class="mb-4">
             <label class="form-label h5">Amount to Receive</label>
             <div class="input-group input-group-lg mb-3">
-              <span class="input-group-text">$</span>
+              <span class="input-group-text"><i class="bi bi-wallet2"></i></span>
               <input
                 type="number"
                 class="form-control text-center fs-2"
@@ -36,18 +36,28 @@
             </div>
           </div>
 
-          <!-- Share Buttons -->
+          <!-- Share Button -->
+      
+        <ng-template #content let-modal>
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal-basic-title">Pay {{ amount}} to {{ user }}</h4>
+                <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+            </div>
+            <div class="modal-body text-center">
+                      <qr-code [value]="shareableLink" 
+                             size="300" 
+                             errorCorrectionLevel="M" />
+            </div>
+        </ng-template>
           <div class="d-grid gap-2">
-            <button class="btn btn-primary btn-lg" (click)="shareViaEmail()">
-              <i class="bi bi-envelope me-2"></i> Share via Email
-            </button>
-            <button class="btn btn-outline-primary btn-lg" (click)="shareViaLink()">
-              <i class="bi bi-link me-2"></i> Copy Link
+            <button class="btn btn-primary btn-lg" (click)="open(content)">
+              <i class="bi bi-qr-code-scan me-2"></i> Show QR Code
             </button>
           </div>
         </div>
       </div>
     </div>
   </div>
+
 </div>
 
