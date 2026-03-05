@@ -1,5 +1,7 @@
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { APIService } from '../../services/api';
+import { Transaction } from '@shared/interfaces/transaction';
 
 @Component({
   selector: 'app-screen-profile',
@@ -7,14 +9,22 @@ import { Component } from '@angular/core';
   templateUrl: './screen-profile.html',
   styleUrl: './screen-profile.less',
 })
-export class ScreenProfile {
-    username = 'John Doe';
+export class ScreenProfile implements OnInit{
+  username = 'John Doe';
   email = 'john.doe@example.com';
+  transactions!: Transaction[];
 
-  transactions = [
-    { partner: 'Alice Smith', amount: 50.00, date: new Date('2026-03-01'), type: 'Received' },
-    { partner: 'Bob Johnson', amount: -25.50, date: new Date('2026-02-28'), type: 'Sent' },
-    { partner: 'Charlie Brown', amount: 75.25, date: new Date('2026-02-27'), type: 'Received' },
-    { partner: 'Diana Prince', amount: -100.00, date: new Date('2026-02-25'), type: 'Sent' },
-  ];
+  constructor(private api: APIService){}
+
+  ngOnInit(): void {
+    this.api.getTransactions().subscribe({
+      next: (transactions) => {
+        this.transactions = transactions;
+      },
+      error: (err) => {
+        console.error('Error fetching transactions:', err);
+      },
+    })
+  }
+
 }
