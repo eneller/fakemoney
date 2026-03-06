@@ -7,7 +7,10 @@
       </div>
       <h3 class="mb-1">{{ username }}</h3>
       <p class="text-muted mb-4">{{ userID }}</p>
-      <button class="btn btn-outline-primary">Edit Profile</button>
+      <div class="d-flex align-items-center justify-content-center gap-2 mb-1">
+        <i class="bi bi-wallet2 fs-4"></i>
+        <h3 class="mb-0">{{ balance  | currency}}</h3>
+      </div>
     </div>
   </div>
 

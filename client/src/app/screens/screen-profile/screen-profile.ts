@@ -12,6 +12,7 @@ import Transaction from '@model/transaction';
 export class ScreenProfile implements OnInit{
   username = 'John Doe';
   userID = 'testuser';
+  balance = 200;
   transactions!: Transaction[];
 
   constructor(private api: APIService){}
