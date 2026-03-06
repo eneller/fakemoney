@@ -1,7 +1,7 @@
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { APIService } from '../../services/api';
-import { Transaction } from '@shared/interfaces/transaction';
+import Transaction from '@model/transaction';
 
 @Component({
   selector: 'app-screen-profile',

@@ -27,7 +27,7 @@
                 <i class="bi bi-person-fill fs-4 text-secondary"></i>
               </div>
               <div class="text-start">
-                <h6 class="mb-0">{{ transaction.partner }}</h6>
+                <h6 class="mb-0">{{ transaction.senderID }}</h6>
                 <small class="text-muted">{{ transaction.date | date:'medium' }}</small>
               </div>
             </div>
@@ -35,7 +35,6 @@
               <h6 class="mb-0" [class.text-success]="transaction.amount > 0" [class.text-danger]="transaction.amount < 0">
                 {{ transaction.amount | currency }}
               </h6>
-              <small class="text-muted">{{ transaction.type }}</small>
             </div>
           </div>
         </div>
