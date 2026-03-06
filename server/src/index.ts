@@ -1,11 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import cors from "cors";
-import * as dotenv from "dotenv";
 import transactionsRouter from './routes/transactions';
-import { db, testConnection } from "./db";
-
-
-dotenv.config();
+import { db, testConnection, logger } from "./util";
 
 const app: Express = express();
 app.use(cors());
@@ -27,10 +23,10 @@ async function startServer() {
   await db.sync({ alter: true }); // Use { force: true } to drop and recreate tables (development only!)
 
   app.listen(PORT, () => {
-    console.log(`🚀 Backend Server running on http://localhost:${PORT}`);
+    logger.info(`🚀 Backend Server running on http://localhost:${PORT}`);
   });
 }
 startServer().catch((err) => {
-  console.error('Failed to start server:', err);
+  logger.error('Failed to start server:', err);
   process.exit(1);
 });
