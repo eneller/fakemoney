@@ -25,7 +25,7 @@ const db = new Sequelize({
   database: process.env.DB_NAME || 'postgres',
   username: process.env.DB_USER || 'postgres',
   password: process.env.DB_PASSWORD || 'pass',
-  logging: false, // Disable logging in production
+  logging: logger.debug.bind(logger),
 });
 
 // Test the connection

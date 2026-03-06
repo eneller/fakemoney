@@ -5,6 +5,8 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "module": "nodenext",
     "moduleResolution": "nodenext"
 
