@@ -1,21 +1,7 @@
-import { Sequelize } from 'sequelize';
-import winston, { format } from "winston";
-import dotenv from 'dotenv';
-
-dotenv.config();
-const logger = winston.createLogger({
-  level:'info',
-})
-if (process.env.NODE_ENV !== 'production') {
-  logger.add(new winston.transports.Console({
-    format: format.combine(
-      format.colorize({all: true}),
-      format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-      format.printf((info) => `${info.timestamp} [${info.level}]: ${info.message}`),
-    )
-
-}));
-}
+import { Sequelize } from 'sequelize-typescript';
+import { logger } from './logging';
+import User from '../model/user';
+import Transaction from '../model/transaction';
 
 // Initialize Sequelize
 const db = new Sequelize({
@@ -27,6 +13,8 @@ const db = new Sequelize({
   password: process.env.DB_PASSWORD || 'pass',
   logging: logger.debug.bind(logger),
 });
+
+db.addModels([User, Transaction ])
 
 // Test the connection
 async function testConnection() {

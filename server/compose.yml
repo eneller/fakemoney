@@ -10,8 +10,8 @@ services:
     image: adminer
     restart: always
     environment:
-      ADMINER_DEFAULT_SERVER: postgres  # Automatically connect to the "postgres" service
+      ADMINER_DEFAULT_SERVER: postgres
     ports:
       - "8080:8080"
     depends_on:
-      - postgres  # Ensure PostgreSQL starts first
+      - postgres

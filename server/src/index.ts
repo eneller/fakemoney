@@ -1,7 +1,8 @@
 import express, { Express, Request, Response } from "express";
 import cors from "cors";
 import transactionsRouter from './routes/transactions';
-import { db, testConnection, logger } from "./util";
+import { db, testConnection } from "./util/db";
+import { logger } from "./util/logging";
 
 const app: Express = express();
 app.use(cors());
