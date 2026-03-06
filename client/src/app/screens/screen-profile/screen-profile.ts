@@ -11,7 +11,7 @@ import Transaction from '@model/transaction';
 })
 export class ScreenProfile implements OnInit{
   username = 'John Doe';
-  email = 'john.doe@example.com';
+  userID = 'testuser';
   transactions!: Transaction[];
 
   constructor(private api: APIService){}

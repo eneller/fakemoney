@@ -6,7 +6,7 @@
         <i class="bi bi-person-circle fs-1 text-primary"></i>
       </div>
       <h3 class="mb-1">{{ username }}</h3>
-      <p class="text-muted mb-4">{{ email }}</p>
+      <p class="text-muted mb-4">{{ userID }}</p>
       <button class="btn btn-outline-primary">Edit Profile</button>
     </div>
   </div>
@@ -27,14 +27,24 @@
                 <i class="bi bi-person-fill fs-4 text-secondary"></i>
               </div>
               <div class="text-start">
+              @if (transaction.receiverID == userID) {
                 <h6 class="mb-0">{{ transaction.senderID }}</h6>
+              }@else {
+                <h6 class="mb-0">{{ transaction.receiverID }}</h6>
+              }
                 <small class="text-muted">{{ transaction.date | date:'medium' }}</small>
               </div>
             </div>
             <div class="text-end">
-              <h6 class="mb-0" [class.text-success]="transaction.amount > 0" [class.text-danger]="transaction.amount < 0">
-                {{ transaction.amount | currency }}
-              </h6>
+              @if (transaction.receiverID == userID) {
+                <h6 class="mb-0 text-success">
+                  {{ transaction.amount | currency }}
+                </h6>
+              }@else {
+                <h6 class="mb-0 text-danger">
+                  {{ - transaction.amount | currency }}
+                </h6>
+              }
             </div>
           </div>
         </div>
