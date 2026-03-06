@@ -1,0 +1,79 @@
+<div class="d-flex align-items-center min-vh-100 bg-light">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-4 col-md-6 col-sm-8">
+        <div class="card shadow-sm">
+          <div class="card-body p-4">
+            <div class="text-center mb-4">
+              <i class="bi bi-lock-fill fs-1 text-primary"></i>
+              <h3 class="mt-2">Sign In</h3>
+            </div>
+
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+              <!-- Email -->
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input
+                  type="text"
+                  id="username"
+                  class="form-control"
+                  formControlName="username"
+                  placeholder="Enter your username"
+                >
+              </div>
+
+              <!-- Password -->
+              <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <div class="input-group">
+                  <input
+                    [type]="showPassword ? 'text' : 'password'"
+                    id="password"
+                    class="form-control"
+                    formControlName="password"
+                    placeholder="Enter your password"
+                  >
+                  <button
+                    class="btn btn-outline-secondary"
+                    type="button"
+                    (click)="showPassword = !showPassword"
+                  >
+                    <i class="bi" [class.bi-eye-fill]="showPassword" [class.bi-eye-slash-fill]="!showPassword"></i>
+                  </button>
+                </div>
+                </div>
+
+                <!-- Submit Button -->
+              <button
+                type="submit"
+                class="btn btn-primary w-100 mb-3"
+              >
+              @if (loading) {
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                  Signing In...
+                </span>
+              }@else {
+                <span>Sign In</span>
+              }
+              </button>
+
+
+              <!-- Error Alert -->
+              <ngb-alert
+                *ngIf="error"
+                type="danger"
+                (closed)="error = null"
+                [dismissible]="true"
+              >
+                {{ error }}
+              </ngb-alert>
+
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+

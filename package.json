@@ -13,8 +13,7 @@
   },
   "workspaces": [
     "client",
-    "server",
-    "shared"
+    "server"
   ],
   "devDependencies": {
     "@types/node": "^25.3.2",
