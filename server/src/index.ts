@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import cors from "cors";
 import transactionsRouter from './routes/transactions';
+import authRouter from './routes/auth';
 import { db, testConnection } from "./util/db";
 import { logger } from "./util/logging";
 
@@ -13,6 +14,7 @@ app.get("/api/health", (req: Request, res: Response) => {
 });
 
 app.use('/api/transactions', transactionsRouter);
+app.use('/api/auth', authRouter);
 
 const PORT: number = parseInt(process.env.PORT as string) || 3000;
 

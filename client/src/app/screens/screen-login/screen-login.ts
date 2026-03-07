@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { Validators, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Validators, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Form } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { APIService } from '../../services/api';
 
 @Component({
   selector: 'app-screen-login',
@@ -18,38 +19,30 @@ export class ScreenLogin {
   error: string | null = null;
 
   constructor(
+    private api: APIService,
+    private router: Router,
     private fb: FormBuilder,
-    private router: Router
   ) {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      rememberMe: [false]
+      username: ['', [Validators.required]],
+      password: ['', [Validators.required]],
     });
   }
 
   onSubmit() {
     this.submitted = true;
     this.error = null;
-
-    if (this.loginForm.invalid) {
-      return;
-    }
-
     this.loading = true;
-    const { email, password, rememberMe } = this.loginForm.value;
 
-    /*
-    this.authService.login(email, password, rememberMe).subscribe({
+    this.api.login(this.loginForm.value.username, this.loginForm.value.password).subscribe({
       next: () => {
-        this.router.navigate(['/dashboard']); // Redirect after login
+        //this.router.navigate(['']);
       },
       error: (err) => {
         this.error = err.error?.message || 'Login failed. Please try again.';
         this.loading = false;
       }
     });
-  */
   }
 }
 

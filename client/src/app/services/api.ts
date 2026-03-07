@@ -14,4 +14,7 @@ export class APIService {
   getTransactions(): Observable<Transaction[]>{
     return this.http.get<Transaction[]>(this.apiUrl + '/transactions');
   }
+  login(username: string, password: string): Observable<any>{
+    return this.http.post(this.apiUrl + '/auth/login',{ 'username': username, 'password': password});
+  }
 }
