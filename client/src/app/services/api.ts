@@ -17,4 +17,7 @@ export class APIService {
   login(username: string, password: string): Observable<any>{
     return this.http.post(this.apiUrl + '/auth/login',{ 'username': username, 'password': password});
   }
+  logout(): Observable<any>{
+    return this.http.post(this.apiUrl + '/auth/logout', {});
+  }
 }

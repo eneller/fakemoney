@@ -4,18 +4,18 @@ import { Table, Column, Model, CreatedAt, DataType} from 'sequelize-typescript';
 export default class User extends Model{
 
     @Column({primaryKey: true, unique: true, allowNull: false})
-    userID!: string;
+    declare userID: string;
 
     @Column
-    displayName!: string;
+    declare displayName: string;
 
     @Column(DataType.DECIMAL(20,2))
-    balance!: number;
+    declare balance: number;
 
     @Column
-    password!: string;
+    declare password: string;
 
     @CreatedAt
-    creationDate!: Date;
+    declare creationDate: Date;
 
 }

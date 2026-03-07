@@ -4,22 +4,22 @@ import User from './user';
 @Table
 export default class Transaction extends Model{
     @Column
-    amount!: number;
+    declare amount: number;
 
     @Column
     @ForeignKey(()=> User)
-    senderID!: string;
+    declare senderID: string;
 
     @BelongsTo(() => User, 'senderID')
-    sender!: User;
+    declare sender: User;
 
     @Column
     @ForeignKey(()=> User)
-    receiverID!: string;
+    declare receiverID: string;
 
     @BelongsTo(() => User, 'receiverID')
-    receiver!: User;
+    declare receiver: User;
 
     @CreatedAt
-    date!: Date;
+    declare date: Date;
 }
