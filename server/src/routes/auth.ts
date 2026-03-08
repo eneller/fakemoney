@@ -1,7 +1,7 @@
 import express, { Request } from 'express';
 import { logger } from '../util/logging';
 import User from '../model/user';
-import { JWT, JWK } from 'ts-jose';
+import { getJWT, checkJWT } from '../util/auth';
 
 const router = express.Router();
 
@@ -16,12 +16,12 @@ router.post('/login', async (req, res) => {
     if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
 
     // successfully authenticated
-    res.cookie('jwt', 'toekn', {
-      /*
+    // TODO change this for production setup
+    res.cookie('jwt', getJWT(user), {
       httpOnly: true,    // Prevent XSS
-      secure: true,      // HTTPS only
-      sameSite: 'strict', // CSRF protection
-      */
+      secure: false,      // HTTPS only
+      sameSite: 'lax', // CSRF protection
+      domain: '.localhost',
       maxAge: 86400000,  // 1 day
     });
     res.json({ message: 'Logged in successfully' });
@@ -37,20 +37,10 @@ router.post('/logout', (req, res) => {
 });
 
 router.get('/status', (req, res) => {
-  console.log(req.cookies);
-  if (isAuthenticated(req)){
+  if (checkJWT(req)){
     return res.status(200).json({authenticated: true});
   }
   return res.status(401).json({authenticated: false});
 })
-
-function isAuthenticated(req: Request){
-  // TODO check JWT
-  return req.cookies.jwt
-}
-
-function getJWT(user: User){
-
-}
 
 export default router;

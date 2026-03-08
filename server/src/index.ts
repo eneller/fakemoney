@@ -7,6 +7,7 @@ import { db, testConnection } from "./util/db";
 import { logger } from "./util/logging";
 
 const app: Express = express();
+// TODO replace with frontend URL
 app.use(cors({ origin: 'http://localhost:4200', credentials: true}));
 app.use(cookieParser());
 app.use(express.json());
@@ -20,12 +21,12 @@ app.use('/api/auth', authRouter);
 
 const PORT: number = parseInt(process.env.PORT as string) || 3000;
 
-// Start server after DB connection is established
 async function startServer() {
-  await testConnection(); // Test DB connection first
+  await testConnection();
 
   // Sync models (use migrations in production!)
-  await db.sync({ alter: true }); // Use { force: true } to drop and recreate tables (development only!)
+  // Use { force: true } to drop and recreate tables (development only!)
+  await db.sync({ alter: true });
 
   app.listen(PORT, () => {
     logger.info(`🚀 Backend Server running on http://localhost:${PORT}`);
