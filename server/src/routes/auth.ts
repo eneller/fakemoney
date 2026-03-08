@@ -1,6 +1,7 @@
 import express, { Request } from 'express';
 import { logger } from '../util/logging';
 import User from '../model/user';
+import { JWT, JWK } from 'ts-jose';
 
 const router = express.Router();
 
@@ -36,7 +37,6 @@ router.post('/logout', (req, res) => {
 });
 
 router.get('/status', (req, res) => {
-
   console.log(req.cookies);
   if (isAuthenticated(req)){
     return res.status(200).json({authenticated: true});
@@ -47,6 +47,10 @@ router.get('/status', (req, res) => {
 function isAuthenticated(req: Request){
   // TODO check JWT
   return req.cookies.jwt
+}
+
+function getJWT(user: User){
+
 }
 
 export default router;

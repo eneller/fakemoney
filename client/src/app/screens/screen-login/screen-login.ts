@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Form } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { APIService } from '../../services/api';
 
@@ -21,6 +21,7 @@ export class ScreenLogin {
   constructor(
     private api: APIService,
     private router: Router,
+    private route: ActivatedRoute,
     private fb: FormBuilder,
   ) {
     this.loginForm = this.fb.group({
@@ -36,13 +37,15 @@ export class ScreenLogin {
 
     this.api.login(this.loginForm.value.username, this.loginForm.value.password).subscribe({
       next: () => {
-        this.router.navigate(['']);
+        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+        this.router.navigateByUrl(returnUrl);
       },
       error: (err) => {
         this.error = err.error?.message || 'Login failed. Please try again.';
         this.loading = false;
       }
     });
+    this.api.checkAuthStatus().subscribe();
   }
 }
 

@@ -23,7 +23,7 @@ export class APIService {
     return this.http.post(this.apiUrl + '/auth/logout', {});
   }
   checkAuthStatus(): Observable<boolean> {
-    return this.http.get(`${this.apiUrl}/auth/status`, { withCredentials: true }).pipe(
+    return this.http.get(`${this.apiUrl}/auth/status`, { withCredentials: true}).pipe(
       map(() => true),
       catchError(() => of(false)),
       tap({
