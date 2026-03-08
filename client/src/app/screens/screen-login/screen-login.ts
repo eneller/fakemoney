@@ -36,7 +36,7 @@ export class ScreenLogin {
 
     this.api.login(this.loginForm.value.username, this.loginForm.value.password).subscribe({
       next: () => {
-        //this.router.navigate(['']);
+        this.router.navigate(['']);
       },
       error: (err) => {
         this.error = err.error?.message || 'Login failed. Please try again.';

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of, tap } from 'rxjs';
 import Transaction from '@model/transaction'
 
 @Injectable({
@@ -8,6 +8,8 @@ import Transaction from '@model/transaction'
 })
 export class APIService {
   private apiUrl = 'http://localhost:3000/api' 
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
+  isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
   
   constructor(private http: HttpClient){}
 
@@ -19,5 +21,15 @@ export class APIService {
   }
   logout(): Observable<any>{
     return this.http.post(this.apiUrl + '/auth/logout', {});
+  }
+  checkAuthStatus(): Observable<boolean> {
+    return this.http.get(`${this.apiUrl}/auth/status`, { withCredentials: true }).pipe(
+      map(() => true),
+      catchError(() => of(false)),
+      tap({
+        next: () => this.isAuthenticatedSubject.next(true),
+        error: () => this.isAuthenticatedSubject.next(false),
+      })
+    );
   }
 }

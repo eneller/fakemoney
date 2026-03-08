@@ -1,12 +1,14 @@
 import express, { Express, Request, Response } from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import transactionsRouter from './routes/transactions';
 import authRouter from './routes/auth';
 import { db, testConnection } from "./util/db";
 import { logger } from "./util/logging";
 
 const app: Express = express();
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:4200', credentials: true}));
+app.use(cookieParser());
 app.use(express.json());
 
 app.get("/api/health", (req: Request, res: Response) => {
