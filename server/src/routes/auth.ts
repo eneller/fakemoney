@@ -1,7 +1,7 @@
 import express from 'express';
 import { logger } from '../util/logging';
 import User from '../model/user';
-import { getJWT, checkJWT } from '../util/auth';
+import { getJWT, requireAuth } from '../util/auth';
 
 const router = express.Router();
 
@@ -35,11 +35,8 @@ router.post('/logout', (req, res) => {
   res.json({ message: 'Logged out successfully' });
 });
 
-router.get('/status', async (req, res) => {
-  if (await checkJWT(req)){
+router.get('/status',requireAuth , async (req, res) => {
     return res.status(200).json({authenticated: true});
-  }
-  return res.status(401).json({authenticated: false});
 })
 
 export default router;

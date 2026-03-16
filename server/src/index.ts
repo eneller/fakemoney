@@ -18,8 +18,8 @@ app.get("/api/health", (req: Request, res: Response) => {
   res.json({ status: "OK" });
 });
 
-app.use('/api/transactions', transactionsRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/transactions', transactionsRouter);
 
 const PORT: number = parseInt(process.env.FM_PORT as string) || 3000;
 

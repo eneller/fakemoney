@@ -1,4 +1,4 @@
-import { Request } from "express"
+import { NextFunction, Request, Response } from "express";
 import User from "../model/user"
 import { importJWK, SignJWT, jwtVerify } from "jose";
 
@@ -7,16 +7,6 @@ let key;
 
 async function setKeyFromEnv() {
     key = await importJWK(JSON.parse(process.env.FM_PRIVATE_KEY));
-}
-
-async function checkJWT(req: Request){
-    try {
-        let jwt= await jwtVerify(req.cookies.jwt, key);
-        const user = await User.findOne({where: { userID: jwt.payload.sub}});
-        return user
-    } catch (error) {
-        return null
-    }
 }
 
 async function getJWT(user: User){
@@ -28,4 +18,35 @@ async function getJWT(user: User){
 
     return jwt
 }
-export {getJWT, checkJWT, setKeyFromEnv}
+
+async function requireAuth(req: Request, res: Response, next: NextFunction) {
+  try {
+    const token = req.cookies.jwt; // Or req.headers.authorization
+    if (!token) {
+      return res.status(401).json({ error: 'Unauthorized: No token provided' });
+    }
+    const jwt= await jwtVerify(token, key);
+    const user = await User.findOne({where: { userID: jwt.payload.sub}});
+    if (!user) {
+      return res.status(401).json({ error: 'Unauthorized: User not found' });
+    }
+    res.locals.user = user;
+    next();
+  } catch (err) {
+    return res.status(401).json({ error: 'Unauthorized: Invalid token' });
+  }
+}
+
+function requireRole(role: string) {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    // First, run requireAuth to ensure the user is authenticated
+    await requireAuth(req, res, () => {
+      if (res.locals.role !== role) {
+        return res.status(403).json({ error: 'Forbidden: Insufficient permissions' });
+      }
+      next(); // User is authenticated and has the required role
+    });
+  };
+}
+
+export {getJWT, setKeyFromEnv, requireAuth}
