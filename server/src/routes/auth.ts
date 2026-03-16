@@ -1,4 +1,4 @@
-import express, { Request } from 'express';
+import express from 'express';
 import { logger } from '../util/logging';
 import User from '../model/user';
 import { getJWT, checkJWT } from '../util/auth';
@@ -16,12 +16,11 @@ router.post('/login', async (req, res) => {
     if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
 
     // successfully authenticated
-    // TODO change this for production setup
-    res.cookie('jwt', getJWT(user), {
+    let jwt = await getJWT(user);
+    res.cookie('jwt', jwt, {
       httpOnly: true,    // Prevent XSS
-      secure: false,      // HTTPS only
-      sameSite: 'lax', // CSRF protection
-      domain: '.localhost',
+      secure: process.env.NODE_ENV === 'production',// HTTPS only
+      sameSite: 'strict', // CSRF protection
       maxAge: 86400000,  // 1 day
     });
     res.json({ message: 'Logged in successfully' });
@@ -36,8 +35,8 @@ router.post('/logout', (req, res) => {
   res.json({ message: 'Logged out successfully' });
 });
 
-router.get('/status', (req, res) => {
-  if (checkJWT(req)){
+router.get('/status', async (req, res) => {
+  if (await checkJWT(req)){
     return res.status(200).json({authenticated: true});
   }
   return res.status(401).json({authenticated: false});

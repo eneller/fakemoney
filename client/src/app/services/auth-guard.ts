@@ -7,6 +7,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   const api = inject(APIService);
   const router = inject(Router);
 
+  //TODO check for cookie
   return api.isAuthenticated$.pipe(
     map((isAuthenticated) => {
       if (isAuthenticated) {

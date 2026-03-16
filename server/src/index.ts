@@ -3,12 +3,14 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import transactionsRouter from './routes/transactions';
 import authRouter from './routes/auth';
+import dotenv from 'dotenv';
+dotenv.config({quiet: true});
 import { db, testConnection } from "./util/db";
 import { logger } from "./util/logging";
+import { setKeyFromEnv } from "./util/auth";
 
 const app: Express = express();
-// TODO replace with frontend URL
-app.use(cors({ origin: 'http://localhost:4200', credentials: true}));
+app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
 
@@ -19,7 +21,7 @@ app.get("/api/health", (req: Request, res: Response) => {
 app.use('/api/transactions', transactionsRouter);
 app.use('/api/auth', authRouter);
 
-const PORT: number = parseInt(process.env.PORT as string) || 3000;
+const PORT: number = parseInt(process.env.FM_PORT as string) || 3000;
 
 async function startServer() {
   await testConnection();
@@ -27,6 +29,7 @@ async function startServer() {
   // Sync models (use migrations in production!)
   // Use { force: true } to drop and recreate tables (development only!)
   await db.sync({ alter: true });
+  await setKeyFromEnv();
 
   app.listen(PORT, () => {
     logger.info(`🚀 Backend Server running on http://localhost:${PORT}`);
