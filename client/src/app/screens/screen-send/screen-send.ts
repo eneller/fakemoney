@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { APIService } from '../../services/api';
 
 @Component({
   selector: 'app-screen-send',
@@ -10,16 +11,27 @@ import { FormsModule } from '@angular/forms';
 export class ScreenSend {
   amount: number = 0;
   recipient: string = '';
-  note: string = '';
+  reference: string = '';
+
+  constructor(
+    private api: APIService,
+  ){}
 
   sendMoney() {
-    console.log('Sending:', this.amount, 'to', this.recipient);
-    // Add your logic here (e.g., API call)
+    this.api.send(this.amount, this.recipient, this.reference).subscribe({
+      next:()=> {
+        this.cancel()
+        //TODO show success message
+      },
+      error:()=> {
+        //TODO show error message
+      }
+    });
   }
 
   cancel() {
     this.amount = 0;
     this.recipient = '';
-    this.note = '';
+    this.reference = '';
   }
 }

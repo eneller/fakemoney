@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, of, tap } from 'rxjs';
 import Transaction from '@model/transaction'
+import { SendRequest, SendResponse } from '@message/Send';
 
 @Injectable({
   providedIn: 'root',
@@ -13,9 +14,6 @@ export class APIService {
   
   constructor(private http: HttpClient){}
 
-  getTransactions(): Observable<Transaction[]>{
-    return this.http.get<Transaction[]>(`${this.apiUrl}/transactions`);
-  }
   login(username: string, password: string): Observable<any>{
     return this.http.post(`${this.apiUrl}/auth/login`,{ 'username': username, 'password': password});
   }
@@ -23,7 +21,7 @@ export class APIService {
     return this.http.post(`${this.apiUrl}/auth/logout`, {});
   }
   checkAuthStatus(): Observable<boolean> {
-    return this.http.get(`${this.apiUrl}/auth/status`, { withCredentials: true}).pipe(
+    return this.http.get(`${this.apiUrl}/auth/status`).pipe(
       map(() => true),
       catchError(() => of(false)),
       tap({
@@ -31,5 +29,12 @@ export class APIService {
         error: () => this.isAuthenticatedSubject.next(false),
       })
     );
+  }
+  getTransactions(): Observable<Transaction[]>{
+    return this.http.get<Transaction[]>(`${this.apiUrl}/transactions`);
+  }
+  send(amount: number, recipientID: string, reference: string = ""): Observable<SendResponse>{
+    let request: SendRequest = {amount,  recipientID, reference};
+    return this.http.post<SendResponse>(`${this.apiUrl}/send`, request);
   }
 }

@@ -7,7 +7,10 @@ const router = express.Router();
 
 router.get('/', requireAuth, async (req, res) => {
   try {
-    const transactions = await Transaction.findAll({ limit: 10 });
+    const transactions = await Transaction.findAll({
+      limit: 100,
+      order: [['date', 'DESC']]
+     });
     res.json(transactions);
   } catch (err) {
     logger.error('Failed to fetch transactions:', err);

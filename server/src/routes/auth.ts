@@ -2,6 +2,9 @@ import express from 'express';
 import { logger } from '../util/logging';
 import User from '../model/user';
 import { getJWT, requireAuth } from '../util/auth';
+import { LoginRequest } from '@message/Login';
+import { SendRequest, SendResponse } from '@message/Send';
+
 
 const router = express.Router();
 
@@ -26,7 +29,7 @@ router.post('/login', async (req, res) => {
     res.json({ message: 'Logged in successfully' });
   }catch (err) {
     logger.error('Failed to authenticate:', err);
-    res.status(500).json({ error: 'Failed to authenticate' });
+    res.status(500).json({ message: 'Failed to authenticate' });
   }
 });
 

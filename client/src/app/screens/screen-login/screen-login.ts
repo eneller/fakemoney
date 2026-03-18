@@ -41,6 +41,7 @@ export class ScreenLogin {
         this.router.navigateByUrl(returnUrl);
       },
       error: (err) => {
+        //FIXME error message displaying delayed, display message from server response
         this.error = err.error?.message || 'Login failed. Please try again.';
         this.loading = false;
       }
