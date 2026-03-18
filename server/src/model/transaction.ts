@@ -5,6 +5,9 @@ import User from './user';
 export default class Transaction extends Model{
     @Column
     declare amount: number;
+    
+    @Column
+    declare reference: string;
 
     @Column
     @ForeignKey(()=> User)

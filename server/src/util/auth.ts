@@ -30,6 +30,7 @@ async function requireAuth(req: Request, res: Response, next: NextFunction) {
     if (!user) {
       return res.status(401).json({ error: 'Unauthorized: User not found' });
     }
+    //TODO extend req instead of using res.locals
     res.locals.user = user;
     next();
   } catch (err) {

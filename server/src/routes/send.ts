@@ -1,41 +1,45 @@
-import express from 'express';
+import express  from 'express';
 import { logger } from '../util/logging';
 import { requireAuth } from '../util/auth';
 import User from '../model/user';
 import { db } from '../util/db';
 import Transaction from '../model/transaction';
+import { SendRequest, SendResponse} from '../messages/Send';
 
 
 const router = express.Router();
 
-router.get('/:recipientID', requireAuth, async (req, res) => {
+router.post('/', requireAuth, async (req, res) => {
   try {
-    let sender = res.locals.user as User;
-    let amount = Number(req.query.amount);
-    let recipient = await User.findOne({where: {userID: req.params.recipientID}})
-    if ( amount <= 0) {
+    const sender = res.locals.user as User;
+    const data : SendRequest = req.body;
+    const recipient = await User.findOne({where: {userID: data.recipientID}})
+    if ( Number(data.amount) <= 0) {
+      // TODO return SendResponse here and everywhere else in this file
       return res.status(400).json({ error: 'Invalid transfer amount' });
     }
     if (!recipient) {
       return res.status(404).json({ error: 'Recipient not found' });
     }
-    if (sender.balance < amount){
-      res.status(400).json({error: 'Insufficient balance'})
+    if (Number(sender.balance) < Number(data.amount)){
+      logger.error(`Insufficient balance: ${sender.balance} < ${data.amount}`)
+      return res.status(402).json({error: 'Insufficient balance'})
     }
 
     await db.transaction(async (t) =>{
-      await sender.decrement({balance: amount});
-      await recipient.increment({balance: amount});
+      await sender.decrement({balance: data.amount});
+      await recipient.increment({balance: data.amount});
       await Transaction.create({
-        amount: amount,
+        amount: data.amount,
         senderID: sender.userID,
-        receiverID: recipient.userID
+        receiverID: recipient.userID,
+        reference: data.reference
       });
     })
-    res.status(200).json({balance: sender.balance, amount: amount});
+    return res.status(200).json({balance: sender.balance, amount: data.amount});
   } catch (err) {
     logger.error('Failed to commit transaction:', err);
-    res.status(500).json({ error: 'Failed to commit transaction' });
+    return res.status(500).json({ error: 'Failed to commit transaction' });
   }
 });
 

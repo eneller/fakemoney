@@ -10,7 +10,8 @@
     "module": "es2022",
     "lib": ["es2022", "dom"],
     "paths": {
-      "@model/*": ["server/src/model/*"]
+      "@model/*": ["server/src/model/*"],
+      "@message/*": ["server/src/messages/*"],
     }
   },
   "exclude": ["node_modules"]
