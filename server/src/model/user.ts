@@ -1,5 +1,10 @@
-import { Table, Column, Model, CreatedAt, DataType} from 'sequelize-typescript';
+import { Table, Column, Model, CreatedAt, DataType, Scopes} from 'sequelize-typescript';
 
+@Scopes(() => ({
+  withoutPassword: {
+    attributes: { exclude: ['password'] }
+  }
+}))
 @Table
 export default class User extends Model{
 

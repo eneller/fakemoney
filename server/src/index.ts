@@ -3,6 +3,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import transactionsRouter from './routes/transactions';
 import authRouter from './routes/auth';
+import sendRouter from './routes/send';
 import dotenv from 'dotenv';
 dotenv.config({quiet: true});
 import { db, testConnection } from "./util/db";
@@ -20,6 +21,7 @@ app.get("/api/health", (req: Request, res: Response) => {
 
 app.use('/api/auth', authRouter);
 app.use('/api/transactions', transactionsRouter);
+app.use('/api/send', sendRouter);
 
 const PORT: number = parseInt(process.env.FM_PORT as string) || 3000;
 

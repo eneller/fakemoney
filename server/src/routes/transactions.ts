@@ -1,10 +1,11 @@
 import express from 'express';
 import { logger } from '../util/logging';
 import Transaction from '../model/transaction';
+import { requireAuth } from '../util/auth';
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+router.get('/', requireAuth, async (req, res) => {
   try {
     const transactions = await Transaction.findAll({ limit: 10 });
     res.json(transactions);
