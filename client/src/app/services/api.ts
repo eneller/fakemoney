@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, of, tap } from 'rxjs';
 import Transaction from '@model/transaction'
 import { SendRequest, SendResponse } from '@message/Send';
+import { TransactionsRequest } from '@message/Transactions';
 
 @Injectable({
   providedIn: 'root',

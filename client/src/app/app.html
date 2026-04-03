@@ -3,13 +3,13 @@
 </main>
 <nav>
   <ul ngbNav [(activeId)]="active" class="nav-tabs custom-navbar bg-body-secondary">
-    <li [ngbNavItem]="1" class="custom-navitem"><a ngbNavLink routerLink="/send">
+    <li ngbNavItem="/send" class="custom-navitem"><a ngbNavLink routerLink="/send">
         <i class="bi bi-cash"></i>
     </a></li>
-    <li [ngbNavItem]="2" class="custom-navitem"><a ngbNavLink routerLink="/receive">
+    <li ngbNavItem="/receive" class="custom-navitem"><a ngbNavLink routerLink="/receive">
         <i class="bi bi-piggy-bank"></i>
     </a></li>
-    <li [ngbNavItem]="3" class="custom-navitem"><a ngbNavLink routerLink="/profile">
+    <li ngbNavItem="/profile" class="custom-navitem"><a ngbNavLink routerLink="/profile">
         <i class="bi bi-person"></i>
     </a></li>
   </ul>
