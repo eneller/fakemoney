@@ -20,15 +20,15 @@ export class App implements OnInit{
   active = '/';
 
   constructor(
-    private router: Router
+    private router: Router,
   ){}
 
   ngOnInit(): void {
+    // show correct active tab
     this.router.events
     .pipe(filter(event => event instanceof NavigationEnd))
     .subscribe(() =>{
       this.active = this.router.url;
-      console.log(this.active);
     });
   }
 
