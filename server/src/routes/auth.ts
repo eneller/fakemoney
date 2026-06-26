@@ -2,34 +2,33 @@ import express from 'express';
 import { logger } from '../util/logging';
 import User from '../model/user';
 import { getJWT, requireAuth } from '../util/auth';
-import { LoginRequest } from '@message/Login';
-import { SendRequest, SendResponse } from '@message/Send';
-
+import { LoginRequest } from '../messages/Login';
+import { GenericMessage as Msg } from '../messages/Message';
 
 const router = express.Router();
 
 router.post('/login', async (req, res) => {
   try {
-    const { username, password } = req.body;
-    const user = await User.findOne({where: { userID: username}});
-    if (!user) return res.status(401).json({ message: 'Invalid credentials' });
-    const isMatch = (password == user.password);
+    const data : LoginRequest = req.body;
+    const user = await User.findOne({where: { userID: data.username}});
+    if (!user) return res.status(401).json(new Msg('Invalid credentials'));
+    const isMatch = (data.password == user.password);
     //TODO hash passwords
     //const isMatch = await bcrypt.compare(password, user.passwordHash);
-    if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
+    if (!isMatch) return res.status(401).json(new Msg('Invalid credentials'));
 
     // successfully authenticated
     let jwt = await getJWT(user);
     res.cookie('jwt', jwt, {
-      httpOnly: true,    // Prevent XSS
-      secure: process.env.NODE_ENV === 'production',// HTTPS only
+      httpOnly: true, // Prevent XSS
+      secure: process.env.NODE_ENV === 'production', // HTTPS only
       sameSite: 'strict', // CSRF protection
       maxAge: 86400000,  // 1 day
     });
-    res.json({ message: 'Logged in successfully' });
+    res.json(new Msg('Logged in successfully'));
   }catch (err) {
     logger.error('Failed to authenticate:', err);
-    res.status(500).json({ message: 'Failed to authenticate' });
+    res.status(500).json(new Msg('Failed to authenticate'));
   }
 });
 

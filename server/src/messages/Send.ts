@@ -9,6 +9,5 @@ export class SendRequest{
 export class SendResponse{
     constructor(
         public balance: number,
-        public message: string
     ){}
 }

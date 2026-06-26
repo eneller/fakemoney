@@ -1,7 +1,7 @@
 export class LoginRequest{
     constructor(
-        username: string,
-        password: string
+        public username: string,
+        public password: string
     ){}
 }
 export class LoginResponse{
