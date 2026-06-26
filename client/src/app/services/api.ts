@@ -16,7 +16,12 @@ export class APIService {
   constructor(private http: HttpClient){}
 
   login(username: string, password: string): Observable<any>{
-    return this.http.post(`${this.apiUrl}/auth/login`,{ 'username': username, 'password': password});
+    return this.http.post(`${this.apiUrl}/auth/login`,{ 'username': username, 'password': password}).pipe(
+      tap({
+        next: () => this.isAuthenticatedSubject.next(true),
+        error: () => this.isAuthenticatedSubject.next(false)
+      })
+    );
   }
   logout(): Observable<any>{
     return this.http.post(`${this.apiUrl}/auth/logout`, {});

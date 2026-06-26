@@ -7,8 +7,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   const api = inject(APIService);
   const router = inject(Router);
 
-  //FIXME always redirected to login after page load
-  return api.isAuthenticated$.pipe(
+  return api.checkAuthStatus().pipe(
     map((isAuthenticated) => {
       if (isAuthenticated) {
         return true;

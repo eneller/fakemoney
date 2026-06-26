@@ -46,7 +46,6 @@ export class ScreenLogin {
         this.loading = false;
       }
     });
-    this.api.checkAuthStatus().subscribe();
   }
 }
 
