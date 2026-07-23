@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, of, tap } from 'rxjs';
 import Transaction from '@model/transaction'
 import { SendRequest, SendResponse } from '@message/Send';
-import { TransactionsRequest } from '@message/Transactions';
 import { LoginResponse } from '@message/Login';
 import Account from '@model/user';
 
@@ -15,6 +14,8 @@ export class APIService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
   
+  // data holding
+  loggedInUser!: Account;
   currentUser!: Account;
   ownedAccounts!: Account[];
 
@@ -25,8 +26,10 @@ export class APIService {
       tap({
         next: (resp) => {
           this.isAuthenticatedSubject.next(true);
-          this.currentUser = resp.user;
+          this.loggedInUser = resp.user;
+          this.currentUser = this.loggedInUser;
           this.ownedAccounts = resp.ownedAccounts;
+          this.ownedAccounts.push(this.loggedInUser);
         },
         error: () => this.isAuthenticatedSubject.next(false)
       })

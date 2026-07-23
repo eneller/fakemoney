@@ -3,10 +3,11 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { APIService } from '../../services/api';
 import Transaction from '@model/transaction';
 import { Router } from '@angular/router';
+import { NgbAccordionToggle, NgbDropdown, NgbDropdownItem, NgbDropdownMenu, NgbDropdownToggle } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-screen-profile',
-  imports: [CurrencyPipe, DatePipe, CommonModule],
+  imports: [CurrencyPipe, DatePipe, CommonModule, NgbDropdown, NgbDropdownMenu, NgbDropdownToggle, NgbDropdownItem],
   templateUrl: './screen-profile.html',
   styleUrl: './screen-profile.less',
 })
