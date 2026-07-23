@@ -1,10 +1,10 @@
 import { compare } from 'bcrypt';
 import express from 'express';
 import { logger } from '../util/logging';
-import Account from '../model/user';
+import Account, { getOwnedAccounts } from '../model/user';
 import { Scope } from '../util/db';
 import { getJWT, requireAuth } from '../util/auth';
-import { LoginRequest } from '../messages/Login';
+import { LoginRequest, LoginResponse } from '../messages/Login';
 import { GenericMessage as Msg } from '../messages/Message';
 
 const router = express.Router();
@@ -25,7 +25,7 @@ router.post('/login', async (req, res) => {
       sameSite: 'strict', // CSRF protection
       maxAge: 86400000,  // 1 day
     });
-    res.json(new Msg('Logged in successfully'));
+    res.json(new LoginResponse(user, await getOwnedAccounts(user)));
   }catch (err) {
     logger.error('Failed to authenticate:', err);
     res.status(500).json(new Msg('Failed to authenticate'));

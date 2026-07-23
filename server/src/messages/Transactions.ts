@@ -2,6 +2,7 @@ import Transaction from "../model/transaction";
 
 export class TransactionsRequest{
     constructor(
+        public forId: string,
         public offset = 0,
         public count = 50,
     ){}

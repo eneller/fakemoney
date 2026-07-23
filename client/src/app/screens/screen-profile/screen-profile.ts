@@ -11,9 +11,6 @@ import { Router } from '@angular/router';
   styleUrl: './screen-profile.less',
 })
 export class ScreenProfile implements OnInit{
-  // TODO display real data
-  username = 'John Doe';
-  balance = 200;
   transactions = signal<Transaction[]>([])
 
   constructor(

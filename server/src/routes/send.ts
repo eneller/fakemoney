@@ -1,7 +1,7 @@
 import express  from 'express';
 import { logger } from '../util/logging';
 import { requireAuth } from '../util/auth';
-import Account from '../model/user';
+import Account, { BusinessOwnership, getOwnedAccounts } from '../model/user';
 import { db } from '../util/db';
 import Transaction from '../model/transaction';
 import { SendRequest, SendResponse} from '../messages/Send';
@@ -12,14 +12,24 @@ const router = express.Router();
 
 router.post('/', requireAuth, async (req, res) => {
   try {
-    const sender = res.locals.user as Account;
+    const user = res.locals.user as Account;
     const data : SendRequest = req.body;
-    const recipient = await Account.findOne({where: {id: data.recipientID}})
     if ( Number(data.amount) <= 0) {
       return res.status(400).json(new Err('Invalid transfer amount'));
     }
+    const recipient = await Account.findOne({where: {id: data.recipientID}})
     if (!recipient) {
       return res.status(404).json(new Err('Recipient not found' ));
+    }
+    const sender = await Account.findOne({where: {id: data.senderID}})
+    if (!sender) {
+      return res.status(404).json(new Err('Sender not found' ));
+    }
+    let ownsAccount = (await getOwnedAccounts(user))?.some(
+      business => business.id == data.senderID
+    );
+    if(!(user.equals(sender) || ownsAccount )){
+      return res.status(403).json(new Err('Unauthorized sender'));
     }
     if (Number(sender.balance) < Number(data.amount)){
       logger.debug(`Insufficient balance: ${sender.balance} < ${data.amount}`)

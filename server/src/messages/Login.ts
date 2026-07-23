@@ -8,6 +8,6 @@ export class LoginRequest{
 export class LoginResponse{
     constructor(
         public user: Account,
-        public ownedBusinesses: Account[],
+        public ownedAccounts: Account[],
     ){}
 }

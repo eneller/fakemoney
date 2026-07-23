@@ -17,7 +17,7 @@ export class ScreenReceive {
   amount: number = 0;
   get shareableLink(): string {
     const currentDomain = window.location.origin;
-    return `${currentDomain}/send/${this.api.currentUser}?amount=${this.amount}`;
+    return `${currentDomain}/send/${this.api.currentUser.id}?amount=${this.amount}`;
   }
 
   copyLink() {

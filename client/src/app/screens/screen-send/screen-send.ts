@@ -22,8 +22,8 @@ export class ScreenSend {
   sendMoney() {
     this.api.send(this.amount, this.recipient, this.reference).subscribe({
       next:()=> {
-        this.clear()
         this.notify.success(`Sent ${this.amount} to ${this.recipient}`);
+        this.clear()
       },
       error:(err)=> {
         if(err.status == 404){

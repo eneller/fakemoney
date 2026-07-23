@@ -4,6 +4,8 @@ import { BehaviorSubject, catchError, map, Observable, of, tap } from 'rxjs';
 import Transaction from '@model/transaction'
 import { SendRequest, SendResponse } from '@message/Send';
 import { TransactionsRequest } from '@message/Transactions';
+import { LoginResponse } from '@message/Login';
+import Account from '@model/user';
 
 @Injectable({
   providedIn: 'root',
@@ -13,15 +15,19 @@ export class APIService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
   
-  // TODO use real user here
-  currentUser = 'DemoUser';
+  currentUser!: Account;
+  ownedAccounts!: Account[];
 
   constructor(private http: HttpClient){}
 
   login(username: string, password: string): Observable<any>{
-    return this.http.post(`${this.apiUrl}/auth/login`,{ 'username': username, 'password': password}).pipe(
+    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`,{ 'username': username, 'password': password}).pipe(
       tap({
-        next: () => this.isAuthenticatedSubject.next(true),
+        next: (resp) => {
+          this.isAuthenticatedSubject.next(true);
+          this.currentUser = resp.user;
+          this.ownedAccounts = resp.ownedAccounts;
+        },
         error: () => this.isAuthenticatedSubject.next(false)
       })
     );
@@ -50,7 +56,8 @@ export class APIService {
     return this.http.get<Transaction[]>(`${this.apiUrl}/transactions`);
   }
   send(amount: number, recipientID: string, reference: string = ""): Observable<SendResponse>{
-    let request: SendRequest = {amount,  recipientID, reference};
+    
+    let request: SendRequest = {senderID: this.currentUser.id, amount,  recipientID, reference};
     return this.http.post<SendResponse>(`${this.apiUrl}/send`, request);
   }
 }
