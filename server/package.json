@@ -15,9 +15,12 @@
     "setup": "docker compose up -d",
     "teardown": "docker compose down",
     "keygen": "ts-node src/scripts/keygen.ts",
+    "hash": "ts-node src/scripts/hash.ts",
+    "verify": "ts-node src/scripts/verify.ts",
     "dev": "npm run setup && npm run node; npm run teardown"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
@@ -31,6 +34,7 @@
     "winston": "^3.19.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",

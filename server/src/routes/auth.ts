@@ -1,3 +1,4 @@
+import { compare } from 'bcrypt';
 import express from 'express';
 import { logger } from '../util/logging';
 import User from '../model/user';
@@ -12,9 +13,7 @@ router.post('/login', async (req, res) => {
     const data : LoginRequest = req.body;
     const user = await User.findOne({where: { userID: data.username}});
     if (!user) return res.status(401).json(new Msg('Invalid credentials'));
-    const isMatch = (data.password == user.password);
-    //TODO hash passwords
-    //const isMatch = await bcrypt.compare(password, user.passwordHash);
+    const isMatch = await compare(data.password, user.password);
     if (!isMatch) return res.status(401).json(new Msg('Invalid credentials'));
 
     // successfully authenticated
