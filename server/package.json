@@ -16,7 +16,8 @@
     "teardown": "docker compose down",
     "keygen": "ts-node src/scripts/keygen.ts",
     "hash": "ts-node src/scripts/hash.ts",
-    "verify": "ts-node src/scripts/verify.ts",
+    "verify-hash": "ts-node src/scripts/verify-hash.ts",
+    "create-user": "ts-node src/scripts/create-user.ts",
     "dev": "npm run setup && npm run node; npm run teardown"
   },
   "dependencies": {

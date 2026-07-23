@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import User from "../model/user"
+import Account from "../model/user"
 import { importJWK, SignJWT, jwtVerify } from "jose";
 
 
@@ -9,9 +9,9 @@ async function setKeyFromEnv() {
     key = await importJWK(JSON.parse(process.env.FM_PRIVATE_KEY));
 }
 
-async function getJWT(user: User){
+async function getJWT(user: Account){
     let jwt = await new SignJWT()
-        .setSubject(user.userID)
+        .setSubject(user.id)
         .setProtectedHeader({ alg: 'HS256' })
         .setIssuedAt()
         .sign(key);
@@ -26,7 +26,7 @@ async function requireAuth(req: Request, res: Response, next: NextFunction) {
       return res.status(401).json({ error: 'Unauthorized: No token provided' });
     }
     const jwt= await jwtVerify(token, key);
-    const user = await User.findOne({where: { userID: jwt.payload.sub}});
+    const user = await Account.findOne({where: { id: jwt.payload.sub}});
     if (!user) {
       return res.status(401).json({ error: 'Unauthorized: User not found' });
     }

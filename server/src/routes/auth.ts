@@ -1,7 +1,7 @@
 import { compare } from 'bcrypt';
 import express from 'express';
 import { logger } from '../util/logging';
-import User from '../model/user';
+import Account from '../model/user';
 import { Scope } from '../util/db';
 import { getJWT, requireAuth } from '../util/auth';
 import { LoginRequest } from '../messages/Login';
@@ -12,7 +12,7 @@ const router = express.Router();
 router.post('/login', async (req, res) => {
   try {
     const data : LoginRequest = req.body;
-    const user = await User.scope(Scope.withPassword).findOne({where: { userID: data.username}});
+    const user = await Account.scope(Scope.withPassword).findOne({where: { id: data.username}});
     if (!user) return res.status(401).json(new Msg('Invalid credentials'));
     const isMatch = await compare(data.password, user.password);
     if (!isMatch) return res.status(401).json(new Msg('Invalid credentials'));

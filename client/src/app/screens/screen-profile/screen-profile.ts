@@ -1,5 +1,5 @@
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { APIService } from '../../services/api';
 import Transaction from '@model/transaction';
 import { Router } from '@angular/router';
@@ -13,12 +13,11 @@ import { Router } from '@angular/router';
 export class ScreenProfile implements OnInit{
   // TODO display real data
   username = 'John Doe';
-  userID = 'testuser';
   balance = 200;
   transactions!: Transaction[];
 
   constructor(
-    private api: APIService,
+    protected api: APIService,
     private router: Router,
   ){}
 

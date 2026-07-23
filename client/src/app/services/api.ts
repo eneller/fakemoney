@@ -13,6 +13,9 @@ export class APIService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
   
+  // TODO use real user here
+  currentUser = 'DemoUser';
+
   constructor(private http: HttpClient){}
 
   login(username: string, password: string): Observable<any>{

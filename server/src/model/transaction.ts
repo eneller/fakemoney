@@ -1,5 +1,5 @@
 import { Table, Column, Model, CreatedAt, ForeignKey, BelongsTo} from 'sequelize-typescript';
-import User from './user';
+import Account from './user';
 
 @Table
 export default class Transaction extends Model{
@@ -10,18 +10,18 @@ export default class Transaction extends Model{
     declare reference: string;
 
     @Column
-    @ForeignKey(()=> User)
+    @ForeignKey(()=> Account)
     declare senderID: string;
 
-    @BelongsTo(() => User, 'senderID')
-    declare sender: User;
+    @BelongsTo(() => Account, 'senderID')
+    declare sender: Account;
 
     @Column
-    @ForeignKey(()=> User)
+    @ForeignKey(()=> Account)
     declare receiverID: string;
 
-    @BelongsTo(() => User, 'receiverID')
-    declare receiver: User;
+    @BelongsTo(() => Account, 'receiverID')
+    declare receiver: Account;
 
     @CreatedAt
     declare date: Date;

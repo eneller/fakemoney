@@ -1,4 +1,4 @@
-import { Table, Column, Model, CreatedAt, DataType, Scopes, DefaultScope} from 'sequelize-typescript';
+import { Table, Column, Model, DataType, Scopes, DefaultScope, DeletedAt, BelongsToMany, ForeignKey} from 'sequelize-typescript';
 
 @DefaultScope(() => ({
   attributes:{ exclude: ['password']}
@@ -9,10 +9,13 @@ import { Table, Column, Model, CreatedAt, DataType, Scopes, DefaultScope} from '
   }
 }))
 @Table
-export default class User extends Model{
+export default class Account extends Model{
 
     @Column({primaryKey: true, unique: true, allowNull: false})
-    declare userID: string;
+    declare id: string;
+
+    @Column
+    declare isBusiness: boolean;
 
     @Column
     declare displayName: string;
@@ -22,8 +25,21 @@ export default class User extends Model{
 
     @Column
     declare password: string;
+    
+    @DeletedAt
+    declare deletedAt: Date | null;
+    
+}
+@Table
+export class BusinessOwnership extends Model {
+  @ForeignKey(() => Account)
+  @Column
+  ownerAccountId!: number;
 
-    @CreatedAt
-    declare creationDate: Date;
+  @ForeignKey(() => Account)
+  @Column
+  ownedAccountId!: number;
 
+  @DeletedAt
+  declare deletedAt: Date | null;
 }

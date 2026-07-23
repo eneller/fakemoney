@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize-typescript';
 import { logger } from './logging';
-import User from '../model/user';
+import Account, { BusinessOwnership } from '../model/user';
 import Transaction from '../model/transaction';
 
 enum Scope{
@@ -19,7 +19,7 @@ const db = new Sequelize({
   logging: logger.debug.bind(logger),
 });
 
-db.addModels([User, Transaction ])
+db.addModels([Account, BusinessOwnership, Transaction ])
 
 // Test the connection
 async function testConnection() {

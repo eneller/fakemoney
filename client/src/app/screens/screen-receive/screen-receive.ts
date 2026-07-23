@@ -2,6 +2,7 @@ import { Component, inject, TemplateRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { QrCodeComponent } from 'ng-qrcode';
+import { APIService } from '../../services/api';
 
 @Component({
   selector: 'app-screen-receive',
@@ -11,12 +12,12 @@ import { QrCodeComponent } from 'ng-qrcode';
 })
 export class ScreenReceive {
   private modalService = inject(NgbModal);
+  api = inject(APIService);
 
-  user = 'DemoUser';
   amount: number = 0;
   get shareableLink(): string {
     const currentDomain = window.location.origin;
-    return `${currentDomain}/send/${this.user}?amount=${this.amount}`;
+    return `${currentDomain}/send/${this.api.currentUser}?amount=${this.amount}`;
   }
 
   copyLink() {

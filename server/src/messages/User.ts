@@ -1,4 +1,4 @@
-import User from "../model/user";
+import Account from "../model/user";
 
 export class UserRequest{
     constructor(
@@ -6,6 +6,6 @@ export class UserRequest{
 }
 export class UserResponse{
     constructor(
-        public user: User
+        public user: Account
     ){}
 }

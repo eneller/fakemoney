@@ -6,7 +6,7 @@
         <i class="bi bi-person-circle fs-1 text-primary"></i>
       </div>
       <h3 class="mb-1">{{ username }}</h3>
-      <p class="text-muted mb-4">{{ userID }}</p>
+      <p class="text-muted mb-4">{{ this.api.currentUser }}</p>
       <div class="d-flex align-items-center justify-content-center gap-2 mb-1">
         <i class="bi bi-wallet2 fs-4"></i>
         <h3 class="mb-0">{{ balance  | currency}}</h3>
@@ -31,7 +31,7 @@
                 <i class="bi bi-person-fill fs-4 text-secondary"></i>
               </div>
               <div class="text-start">
-              @if (transaction.receiverID == userID) {
+              @if (transaction.receiverID == this.api.currentUser) {
                 <h6 class="mb-0">{{ transaction.senderID }}</h6>
               }@else {
                 <h6 class="mb-0">{{ transaction.receiverID }}</h6>
@@ -40,7 +40,7 @@
               </div>
             </div>
             <div class="text-end">
-              @if (transaction.receiverID == userID) {
+              @if (transaction.receiverID == this.api.currentUser) {
                 <h6 class="mb-0 text-success">
                   {{ transaction.amount | currency }}
                 </h6>
