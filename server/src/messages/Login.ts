@@ -1,3 +1,4 @@
+import Account from "../model/user";
 export class LoginRequest{
     constructor(
         public username: string,
@@ -5,5 +6,8 @@ export class LoginRequest{
     ){}
 }
 export class LoginResponse{
-    constructor(){}
+    constructor(
+        public user: Account,
+        public ownedBusinesses: Account[],
+    ){}
 }
