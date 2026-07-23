@@ -4,6 +4,7 @@ import { Validators, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, F
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { APIService } from '../../services/api';
+import { GenericMessage } from '@message/Message';
 
 @Component({
   selector: 'app-screen-login',
@@ -40,9 +41,10 @@ export class ScreenLogin {
         const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
         this.router.navigateByUrl(returnUrl);
       },
-      error: (err) => {
+      error: (resp) => {
         //FIXME error message displaying delayed, display message from server response
-        this.error = err.error?.message || 'Login failed. Please try again.';
+        let msg: GenericMessage = resp.error;
+        this.error = msg.message || 'Login failed. Please try again.';
         this.loading = false;
       }
     });

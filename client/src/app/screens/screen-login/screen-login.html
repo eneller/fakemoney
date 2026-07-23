@@ -57,15 +57,15 @@
 
 
               <!-- Error Alert -->
+              @if (error) {
               <ngb-alert
-                *ngIf="error"
                 type="danger"
                 (closed)="error = null"
                 [dismissible]="true"
               >
                 {{ error }}
               </ngb-alert>
-
+              }
             </form>
           </div>
         </div>

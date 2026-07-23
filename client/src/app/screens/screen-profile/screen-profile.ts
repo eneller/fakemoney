@@ -36,7 +36,7 @@ export class ScreenProfile implements OnInit{
   logOut(){
     this.api.logout().subscribe({
       next: () => {
-        this.router.navigate(['login'])
+        this.router.navigate(['/'])
       },
       error: (err) => {
         console.error('Error logging out:', err)

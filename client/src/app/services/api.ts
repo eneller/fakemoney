@@ -24,15 +24,22 @@ export class APIService {
     );
   }
   logout(): Observable<any>{
-    return this.http.post(`${this.apiUrl}/auth/logout`, {});
+    return this.http.post(`${this.apiUrl}/auth/logout`, {}).pipe(
+    tap({
+      next: () => this.isAuthenticatedSubject.next(false),
+      error: () => this.isAuthenticatedSubject.next(false),
+    })
+  );
+  }
+  clearAuthState() {
+    this.isAuthenticatedSubject.next(false);
   }
   checkAuthStatus(): Observable<boolean> {
     return this.http.get(`${this.apiUrl}/auth/status`).pipe(
       map(() => true),
       catchError(() => of(false)),
-      tap({
-        next: () => this.isAuthenticatedSubject.next(true),
-        error: () => this.isAuthenticatedSubject.next(false),
+      tap( authenticated => {
+        this.isAuthenticatedSubject.next(authenticated);
       })
     );
   }
