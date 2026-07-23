@@ -3,6 +3,11 @@ import { logger } from './logging';
 import User from '../model/user';
 import Transaction from '../model/transaction';
 
+enum Scope{
+  // for User
+  withPassword = 'withPassword',
+}
+
 // Initialize Sequelize
 const db = new Sequelize({
   dialect: 'postgres',
@@ -28,4 +33,4 @@ async function testConnection() {
 }
 
 // Export Sequelize instance and models
-export { logger, db, testConnection };
+export { logger, db, testConnection, Scope };

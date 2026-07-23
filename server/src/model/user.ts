@@ -1,8 +1,11 @@
-import { Table, Column, Model, CreatedAt, DataType, Scopes} from 'sequelize-typescript';
+import { Table, Column, Model, CreatedAt, DataType, Scopes, DefaultScope} from 'sequelize-typescript';
 
+@DefaultScope(() => ({
+  attributes:{ exclude: ['password']}
+}))
 @Scopes(() => ({
-  withoutPassword: {
-    attributes: { exclude: ['password'] }
+  withPassword: {
+    attributes: {include: ['password']}
   }
 }))
 @Table
