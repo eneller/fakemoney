@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Form } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -15,9 +15,9 @@ import { GenericMessage } from '@message/Message';
 export class ScreenLogin {
   loginForm: FormGroup;
   submitted = false;
-  loading = false;
+  loading = signal(false);
   showPassword = false;
-  error: string | null = null;
+  error = signal<string|null>(null);
 
   constructor(
     private api: APIService,
@@ -33,8 +33,8 @@ export class ScreenLogin {
 
   onSubmit() {
     this.submitted = true;
-    this.error = null;
-    this.loading = true;
+    this.error.set(null);
+    this.loading.set(true)
 
     this.api.login(this.loginForm.value.username, this.loginForm.value.password).subscribe({
       next: () => {
@@ -42,10 +42,9 @@ export class ScreenLogin {
         this.router.navigateByUrl(returnUrl);
       },
       error: (resp) => {
-        //FIXME error message displaying delayed, display message from server response
         let msg: GenericMessage = resp.error;
-        this.error = msg.message || 'Login failed. Please try again.';
-        this.loading = false;
+        this.error.set(msg.message || 'Login failed. Please try again.');
+        this.loading.set(false);
       }
     });
   }

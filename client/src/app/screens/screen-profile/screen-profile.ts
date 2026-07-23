@@ -1,5 +1,5 @@
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { APIService } from '../../services/api';
 import Transaction from '@model/transaction';
 import { Router } from '@angular/router';
@@ -14,7 +14,7 @@ export class ScreenProfile implements OnInit{
   // TODO display real data
   username = 'John Doe';
   balance = 200;
-  transactions!: Transaction[];
+  transactions = signal<Transaction[]>([])
 
   constructor(
     protected api: APIService,
@@ -22,10 +22,9 @@ export class ScreenProfile implements OnInit{
   ){}
 
   ngOnInit(): void {
-    // FIXME transactions displaying delayed (only on second nav click)
     this.api.getTransactions().subscribe({
       next: (transactions) => {
-        this.transactions = transactions;
+        this.transactions.set(transactions);
       },
       error: (err) => {
         console.error('Error fetching transactions:', err);

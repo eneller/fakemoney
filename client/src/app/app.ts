@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterOutlet, RouterLinkWithHref, Router, NavigationEnd } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {
@@ -8,6 +8,7 @@ import {
 	NgbNavLinkBase,
 } from '@ng-bootstrap/ng-bootstrap/nav';
 import { filter } from 'rxjs';
+import { APIService } from './services/api';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +18,7 @@ import { filter } from 'rxjs';
 })
 export class App implements OnInit{
   protected readonly title = signal('client');
+  protected api = inject(APIService);
   active = '/';
 
   constructor(
@@ -24,6 +26,7 @@ export class App implements OnInit{
   ){}
 
   ngOnInit(): void {
+    this.api.checkAuthStatus().subscribe();
     this.router.events
     .pipe(filter(event => event instanceof NavigationEnd))
     .subscribe(() =>{

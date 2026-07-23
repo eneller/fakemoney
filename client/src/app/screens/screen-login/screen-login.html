@@ -48,7 +48,7 @@
                 type="submit"
                 class="btn btn-primary w-100 mb-3"
               >
-              @if (loading) {
+              @if (loading()) {
                 <span> Signing In... </span>
               }@else {
                 <span>Sign In</span>
@@ -57,13 +57,13 @@
 
 
               <!-- Error Alert -->
-              @if (error) {
+              @if (error()) {
               <ngb-alert
                 type="danger"
-                (closed)="error = null"
+                (closed)="error.set(null)"
                 [dismissible]="true"
               >
-                {{ error }}
+                {{ error() }}
               </ngb-alert>
               }
             </form>
