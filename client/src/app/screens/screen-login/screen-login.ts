@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { APIService } from '../../services/api';
 import { GenericMessage } from '@message/Message';
+import { NotificationService } from '../../services/notification';
 
 @Component({
   selector: 'app-screen-login',
@@ -21,6 +22,7 @@ export class ScreenLogin {
 
   constructor(
     private api: APIService,
+    private notify: NotificationService,
     private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
@@ -43,7 +45,7 @@ export class ScreenLogin {
       },
       error: (resp) => {
         let msg: GenericMessage = resp.error;
-        this.error.set(msg.message || 'Login failed. Please try again.');
+        this.notify.error(msg.message || 'Login failed. Please try again.');
         this.loading.set(false);
       }
     });

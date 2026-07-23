@@ -9,10 +9,11 @@ import {
 } from '@ng-bootstrap/ng-bootstrap/nav';
 import { filter } from 'rxjs';
 import { APIService } from './services/api';
+import { ToastContainer } from "./components/toast-container/toast-container";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NgbModule, NgbNav, NgbNavItem, NgbNavItemRole, NgbNavLinkBase, RouterLinkWithHref],
+  imports: [RouterOutlet, NgbModule, NgbNav, NgbNavItem, NgbNavItemRole, NgbNavLinkBase, RouterLinkWithHref, ToastContainer],
   templateUrl: './app.html',
   styleUrl: './app.less'
 })

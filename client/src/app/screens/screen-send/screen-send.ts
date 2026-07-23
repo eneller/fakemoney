@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { APIService } from '../../services/api';
+import { NotificationService } from '../../services/notification';
 
 @Component({
   selector: 'app-screen-send',
@@ -15,21 +16,30 @@ export class ScreenSend {
 
   constructor(
     private api: APIService,
+    private notify: NotificationService,
   ){}
 
   sendMoney() {
     this.api.send(this.amount, this.recipient, this.reference).subscribe({
       next:()=> {
-        this.cancel()
-        //TODO show success message
+        this.clear()
+        this.notify.success(`Sent ${this.amount} to ${this.recipient}`);
       },
-      error:()=> {
-        //TODO show error message
+      error:(err)=> {
+        if(err.status == 404){
+          this.notify.error(`Invalid recipient "${this.recipient}"`);
+        }
+        else if(err.status == 402){
+          this.notify.error(`Insufficient funds.`);
+        }
+        else{
+          this.notify.error(`An error occurred during payment: ${err.status}`);
+        }
       }
     });
   }
 
-  cancel() {
+  clear() {
     this.amount = 0;
     this.recipient = '';
     this.reference = '';
