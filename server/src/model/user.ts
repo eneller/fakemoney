@@ -2,7 +2,6 @@ import { Table, Column, Model, DataType, Scopes, DefaultScope, DeletedAt, Belong
 
 @Table
 @DefaultScope(() => ({
-  //FIXME getting account still includes password
   attributes:{ exclude: ['password']}
 }))
 @Scopes(() => ({
