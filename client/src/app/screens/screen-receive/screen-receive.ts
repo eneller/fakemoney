@@ -1,8 +1,9 @@
-import { Component, inject, TemplateRef } from '@angular/core';
+import { Component, inject, TemplateRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { QrCodeComponent } from 'ng-qrcode';
 import { APIService } from '../../services/api';
+import { Modal } from '../../components/modal/modal';
 
 @Component({
   selector: 'app-screen-receive',
@@ -13,6 +14,7 @@ import { APIService } from '../../services/api';
 export class ScreenReceive {
   private modalService = inject(NgbModal);
   api = inject(APIService);
+  @ViewChild('qrTemplate') qrTemplate !: TemplateRef<any>;
 
   amount: number = 0;
   get shareableLink(): string {
@@ -23,7 +25,9 @@ export class ScreenReceive {
   copyLink() {
     navigator.clipboard.writeText(this.shareableLink);
   }
-  open(content: TemplateRef<any>) {
-    this.modalService.open(content)
+  openModal() {
+    const modalRef = this.modalService.open(Modal);
+    modalRef.componentInstance.title = `Pay ${this.amount} to ${this.api.currentUser.id}`
+    modalRef.componentInstance.body = this.qrTemplate;
   }
 }

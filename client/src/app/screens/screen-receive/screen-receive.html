@@ -38,19 +38,13 @@
 
           <!-- Share Button -->
       
-        <ng-template #content let-modal>
-            <div class="modal-header">
-                <h4 class="modal-title" id="modal-basic-title">Pay {{ amount}} to {{ this.api.currentUser.id }}</h4>
-                <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
-            </div>
-            <div class="modal-body text-center">
-                      <qr-code [value]="shareableLink" 
-                             size="300" 
-                             errorCorrectionLevel="M" />
-            </div>
+        <ng-template #qrTemplate>
+          <qr-code [value]="shareableLink" 
+                 size="300" 
+                 errorCorrectionLevel="M" />
         </ng-template>
           <div class="d-grid gap-2">
-            <button class="btn btn-primary btn-lg" (click)="open(content)">
+            <button class="btn btn-primary btn-lg" (click)="openModal()">
               <i class="bi bi-qr-code-scan me-2"></i> Show QR Code
             </button>
           </div>
