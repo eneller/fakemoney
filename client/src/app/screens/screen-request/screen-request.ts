@@ -6,12 +6,12 @@ import { APIService } from '../../services/api';
 import { Modal } from '../../components/modal/modal';
 
 @Component({
-  selector: 'app-screen-receive',
+  selector: 'app-screen-request',
   imports: [FormsModule, QrCodeComponent],
-  templateUrl: './screen-receive.html',
-  styleUrl: './screen-receive.less',
+  templateUrl: './screen-request.html',
+  styleUrl: './screen-request.less',
 })
-export class ScreenReceive {
+export class ScreenRequest {
   private modalService = inject(NgbModal);
   api = inject(APIService);
   @ViewChild('qrTemplate') qrTemplate !: TemplateRef<any>;

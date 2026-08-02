@@ -3,12 +3,12 @@ import { FormsModule } from '@angular/forms';
 import { APIService } from '../../services/api';
 import { NotificationService } from '../../services/notification';
 import  QrScanner from 'qr-scanner';
-import { NgbModal, NgbSlide } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Modal } from '../../components/modal/modal';
 
 @Component({
   selector: 'app-screen-send',
-  imports: [FormsModule, NgbSlide],
+  imports: [FormsModule],
   templateUrl: './screen-send.html',
   styleUrl: './screen-send.less',
 })
@@ -54,8 +54,6 @@ export class ScreenSend {
     const modalRef = this.modalService.open(Modal);
     modalRef.componentInstance.title = 'Scan a QR Code';
     modalRef.componentInstance.body = this.templScanner;
-
-
   }
   closeScanner(){}
 }

@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ScreenReceive } from './screen-receive';
+import { ScreenRequest } from './screen-request';
 
 describe('ScreenReceive', () => {
-  let component: ScreenReceive;
-  let fixture: ComponentFixture<ScreenReceive>;
+  let component: ScreenRequest;
+  let fixture: ComponentFixture<ScreenRequest>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ScreenReceive],
+      imports: [ScreenRequest],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ScreenReceive);
+    fixture = TestBed.createComponent(ScreenRequest);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

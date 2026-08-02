@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { ScreenSend } from './screens/screen-send/screen-send';
-import { ScreenReceive } from './screens/screen-receive/screen-receive';
+import { ScreenRequest } from './screens/screen-request/screen-request';
 import { ScreenProfile } from './screens/screen-profile/screen-profile';
 import { ScreenLogin } from './screens/screen-login/screen-login';
 import { authGuard } from './services/auth-guard';
@@ -22,7 +22,7 @@ export const routes: Routes = [
     },
     {
         path:'receive',
-        component: ScreenReceive,
+        component: ScreenRequest,
         canActivate: [authGuard],
     },
     {
