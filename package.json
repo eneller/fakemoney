@@ -9,8 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "npm run dev --workspace=server",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "teardown": "npm run teardown --workspace=server"
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "workspaces": [
     "client",

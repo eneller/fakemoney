@@ -18,7 +18,8 @@
     "hash": "ts-node src/scripts/hash.ts",
     "verify-hash": "ts-node src/scripts/verify-hash.ts",
     "create-user": "ts-node src/scripts/create-user.ts",
-    "dev": "npm run setup && npm run node; npm run teardown"
+    "dev-bg": "npm run setup && npm run node",
+    "dev": "ts-node src/scripts/dev.ts"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
