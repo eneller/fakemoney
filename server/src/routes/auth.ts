@@ -37,8 +37,14 @@ router.post('/logout', (req, res) => {
   res.json({ message: 'Logged out successfully' });
 });
 
-router.get('/status',requireAuth , async (req, res) => {
-    return res.status(200).json({authenticated: true});
-})
+router.get('/status', requireAuth, async (req, res) => {
+  try {
+    const user: Account = res.locals.user;
+    return res.json(new LoginResponse(user, await getOwnedAccounts(user)));
+  }catch (err) {
+    logger.error('Failed to restore session:', err);
+    res.status(500).json(new Msg('Failed to restore session'));
+  }
+});
 
 export default router;

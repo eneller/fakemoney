@@ -21,16 +21,18 @@ export class APIService {
 
   constructor(private http: HttpClient){}
 
+  private restoreSession(resp: LoginResponse) {
+    this.loggedInUser = resp.user;
+    this.currentUser = this.loggedInUser;
+    this.ownedAccounts = resp.ownedAccounts;
+    this.ownedAccounts.push(this.loggedInUser);
+    this.isAuthenticatedSubject.next(true);
+  }
+
   login(username: string, password: string): Observable<any>{
     return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`,{ 'username': username, 'password': password}).pipe(
       tap({
-        next: (resp) => {
-          this.isAuthenticatedSubject.next(true);
-          this.loggedInUser = resp.user;
-          this.currentUser = this.loggedInUser;
-          this.ownedAccounts = resp.ownedAccounts;
-          this.ownedAccounts.push(this.loggedInUser);
-        },
+        next: (resp) => this.restoreSession(resp),
         error: () => this.isAuthenticatedSubject.next(false)
       })
     );
@@ -47,12 +49,13 @@ export class APIService {
     this.isAuthenticatedSubject.next(false);
   }
   checkAuthStatus(): Observable<boolean> {
-    return this.http.get(`${this.apiUrl}/auth/status`).pipe(
+    return this.http.get<LoginResponse>(`${this.apiUrl}/auth/status`).pipe(
+      tap({
+        next: (resp) => this.restoreSession(resp),
+        error: () => this.clearAuthState(),
+      }),
       map(() => true),
-      catchError(() => of(false)),
-      tap( authenticated => {
-        this.isAuthenticatedSubject.next(authenticated);
-      })
+      catchError(() => of(false))
     );
   }
   getTransactions(): Observable<Transaction[]>{

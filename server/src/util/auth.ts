@@ -6,6 +6,7 @@ import { importJWK, SignJWT, jwtVerify } from "jose";
 let key;
 
 async function setKeyFromEnv() {
+    // TODO explicit error when no key available or auto-generate
     key = await importJWK(JSON.parse(process.env.FM_PRIVATE_KEY));
 }
 
