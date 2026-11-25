@@ -23,6 +23,7 @@ describe('ScreenSend', () => {
   it('fills the recipient and amount from a scanned payment link', () => {
     const close = vi.fn();
     component['scannerModalRef'] = { close } as any;
+    component['scannerHandled'] = false;
 
     component.onQrScanned('https://example.com/send/bob?amount=12.50');
 
@@ -32,9 +33,18 @@ describe('ScreenSend', () => {
   });
 
   it('accepts a scanned account id', () => {
+    component['scannerHandled'] = false;
     component.onQrScanned('  carol  ');
 
     expect(component.recipient).toBe('carol');
     expect(component.amount).toBe(0);
+  });
+
+  it('ignores repeated scans until the scanner is opened again', () => {
+    component['scannerHandled'] = false;
+    component.onQrScanned('bob');
+    component.onQrScanned('carol');
+
+    expect(component.recipient).toBe('bob');
   });
 });

@@ -3,11 +3,11 @@ import { QR_SCANNER_FACTORY, QrScannerComponent } from './qr-scanner';
 
 describe('QrScannerComponent', () => {
   let fixture: ComponentFixture<QrScannerComponent>;
-  let scanner: { start: ReturnType<typeof vi.fn>; destroy: ReturnType<typeof vi.fn> };
+  let scanner: { start: ReturnType<typeof vi.fn>; stop: ReturnType<typeof vi.fn>; destroy: ReturnType<typeof vi.fn> };
   let onDecode: (data: string) => void;
 
   beforeEach(async () => {
-    scanner = { start: vi.fn(() => Promise.resolve()), destroy: vi.fn() };
+    scanner = { start: vi.fn(() => Promise.resolve()), stop: vi.fn(), destroy: vi.fn() };
     await TestBed.configureTestingModule({
       imports: [QrScannerComponent],
       providers: [{
@@ -33,6 +33,19 @@ describe('QrScannerComponent', () => {
 
     expect(scanner.start).toHaveBeenCalled();
     expect(scanned).toHaveBeenCalledWith('bob');
+  });
+
+  it('reports only the first decode and stops the camera', async () => {
+    const scanned = vi.fn();
+    fixture.componentInstance.scanned.subscribe(scanned);
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+    onDecode('bob');
+    onDecode('bob');
+
+    expect(scanned).toHaveBeenCalledTimes(1);
+    expect(scanner.stop).toHaveBeenCalledTimes(1);
   });
 
   it('shows a helpful error when camera access is blocked', async () => {

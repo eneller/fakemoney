@@ -1,4 +1,4 @@
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, TemplateRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { APIService } from '../../services/api';
 import { NotificationService } from '../../services/notification';
@@ -17,12 +17,14 @@ export class ScreenSend {
   recipient: string = '';
   reference: string = '';
   private scannerModalRef?: NgbModalRef;
+  private scannerHandled = true;
   @ViewChild('qrScanner') templScanner!: TemplateRef<any>;
 
   constructor(
     private api: APIService,
     private notify: NotificationService,
     private modalService: NgbModal,
+    private cdr: ChangeDetectorRef,
   ){}
 
   sendMoney() {
@@ -51,7 +53,8 @@ export class ScreenSend {
     this.reference = '';
   }
   openScanner(){
-    const modalRef = this.modalService.open(Modal);
+    this.scannerHandled = false;
+    const modalRef = this.modalService.open(Modal, { animation: false });
     modalRef.componentInstance.title = 'Scan a QR Code';
     modalRef.componentInstance.body = this.templScanner;
     this.scannerModalRef = modalRef;
@@ -63,12 +66,14 @@ export class ScreenSend {
   }
 
   onQrScanned(data: string) {
-    if (!data?.trim()) return;
+    if (this.scannerHandled || !data?.trim()) return;
+    this.scannerHandled = true;
     const { recipient, amount } = this.parsePaymentQr(data);
     this.recipient = recipient;
     if (amount !== undefined) this.amount = amount;
-    this.notify.success(`Recipient set to ${recipient}`);
+    this.cdr.markForCheck();
     this.scannerModalRef?.close();
+    this.notify.success(`Recipient set to ${recipient}`);
   }
 
   private parsePaymentQr(data: string): { recipient: string; amount?: number } {

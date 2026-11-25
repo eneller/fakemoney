@@ -3,6 +3,7 @@ import QrScanner from 'qr-scanner';
 
 export interface QrScannerHandle {
   start(): Promise<void>;
+  stop(): void;
   destroy(): void;
 }
 
@@ -38,6 +39,7 @@ export class QrScannerComponent implements AfterViewInit, OnDestroy {
   readonly error = signal<string | null>(null);
   private factory = inject(QR_SCANNER_FACTORY);
   private scanner?: QrScannerHandle;
+  private scannedOnce = false;
   private destroyed = false;
 
   async ngAfterViewInit(): Promise<void> {
@@ -47,7 +49,13 @@ export class QrScannerComponent implements AfterViewInit, OnDestroy {
       if (this.destroyed) return;
       const scanner = this.factory.create(
         this.video.nativeElement,
-        (data) => this.scanned.emit(data),
+        (data) => {
+          // A code stays in view for many frames; only report it once.
+          if (this.scannedOnce) return;
+          this.scannedOnce = true;
+          this.scanner?.stop();
+          this.scanned.emit(data);
+        },
       );
       this.scanner = scanner;
       await scanner.start();
