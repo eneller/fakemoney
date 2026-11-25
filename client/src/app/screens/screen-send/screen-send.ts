@@ -1,14 +1,14 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { APIService } from '../../services/api';
 import { NotificationService } from '../../services/notification';
-import  QrScanner from 'qr-scanner';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Modal } from '../../components/modal/modal';
+import { QrScannerComponent } from '../../components/qr-scanner/qr-scanner';
 
 @Component({
   selector: 'app-screen-send',
-  imports: [FormsModule],
+  imports: [FormsModule, QrScannerComponent],
   templateUrl: './screen-send.html',
   styleUrl: './screen-send.less',
 })
@@ -16,7 +16,7 @@ export class ScreenSend {
   amount: number = 0;
   recipient: string = '';
   reference: string = '';
-  scanner!: QrScanner;
+  private scannerModalRef?: NgbModalRef;
   @ViewChild('qrScanner') templScanner!: TemplateRef<any>;
 
   constructor(
@@ -54,6 +54,39 @@ export class ScreenSend {
     const modalRef = this.modalService.open(Modal);
     modalRef.componentInstance.title = 'Scan a QR Code';
     modalRef.componentInstance.body = this.templScanner;
+    this.scannerModalRef = modalRef;
+    const forgetRef = () => {
+      if (this.scannerModalRef === modalRef) this.scannerModalRef = undefined;
+    };
+    modalRef.closed.subscribe(forgetRef);
+    modalRef.dismissed.subscribe(forgetRef);
   }
-  closeScanner(){}
+
+  onQrScanned(data: string) {
+    if (!data?.trim()) return;
+    const { recipient, amount } = this.parsePaymentQr(data);
+    this.recipient = recipient;
+    if (amount !== undefined) this.amount = amount;
+    this.notify.success(`Recipient set to ${recipient}`);
+    this.scannerModalRef?.close();
+  }
+
+  private parsePaymentQr(data: string): { recipient: string; amount?: number } {
+    const value = data.trim();
+    try {
+      const url = new URL(value);
+      const match = url.pathname.match(/\/send\/([^/]+)\/?$/);
+      if (!match) return { recipient: value };
+
+      const amountParam = url.searchParams.get('amount');
+      const parsedAmount = amountParam === null ? NaN : Number(amountParam);
+      return {
+        recipient: decodeURIComponent(match[1]),
+        amount: Number.isFinite(parsedAmount) && parsedAmount >= 0 ? parsedAmount : undefined,
+      };
+    } catch {
+      // A QR code may also contain just an account id instead of a payment link.
+      return { recipient: value };
+    }
+  }
 }

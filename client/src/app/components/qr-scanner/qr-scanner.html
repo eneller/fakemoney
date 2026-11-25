@@ -1,0 +1,8 @@
+<div class="qr-scanner">
+  <video #video playsinline muted></video>
+  @if (error(); as message) {
+    <div class="alert alert-danger mt-3 mb-0" role="alert">{{ message }}</div>
+  } @else {
+    <p class="text-muted mt-3 mb-0">Point your camera at a payment QR code.</p>
+  }
+</div>
