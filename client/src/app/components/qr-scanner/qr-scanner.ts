@@ -7,14 +7,12 @@ export interface QrScannerHandle {
 }
 
 export interface QrScannerFactory {
-  hasCamera(): Promise<boolean>;
   create(video: HTMLVideoElement, onDecode: (data: string) => void): QrScannerHandle;
 }
 
 export const QR_SCANNER_FACTORY = new InjectionToken<QrScannerFactory>('QR_SCANNER_FACTORY', {
   providedIn: 'root',
   factory: () => ({
-    hasCamera: () => QrScanner.hasCamera(),
     create: (video, onDecode) => new QrScanner(
       video,
       (result) => onDecode(result.data),
@@ -44,12 +42,9 @@ export class QrScannerComponent implements AfterViewInit, OnDestroy {
 
   async ngAfterViewInit(): Promise<void> {
     try {
-      if (!await this.factory.hasCamera()) {
-        this.error.set('No camera found on this device.');
-        return;
-      }
+      // Call start() directly so the browser shows its permission prompt.
+      // Checking hasCamera() first can suppress the prompt on mobile devices.
       if (this.destroyed) return;
-
       const scanner = this.factory.create(
         this.video.nativeElement,
         (data) => this.scanned.emit(data),
@@ -60,8 +55,15 @@ export class QrScannerComponent implements AfterViewInit, OnDestroy {
         scanner.destroy();
         this.scanner = undefined;
       }
-    } catch {
-      this.error.set('Could not access the camera. Please allow camera access and try again.');
+    } catch (err: unknown) {
+      const name = err instanceof DOMException ? err.name : '';
+      if (name === 'NotFoundError' || name === 'OverconstrainedError') {
+        this.error.set('No camera found on this device.');
+      } else if (name === 'NotAllowedError' || name === 'PermissionDeniedError' || name === 'SecurityError') {
+        this.error.set('Camera access is blocked. Allow it for this site and use HTTPS (or localhost).');
+      } else {
+        this.error.set('Could not start the camera. Camera access requires HTTPS (or localhost).');
+      }
       this.scanner?.destroy();
       this.scanner = undefined;
     }

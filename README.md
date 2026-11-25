@@ -17,5 +17,7 @@ Is simplified using Docker and by making a few assumptions, e.g. that API and fr
 ### Frontend
 Is written in angular + bootstrap.
 
+To test the QR scanner on a phone, the page must be served over HTTPS (browsers block camera access on plain HTTP LAN addresses). Run `npm run dev:https` from the repository root; it generates a self-signed certificate for your LAN IP (including the IP in `client/.ssl/`) and serves the client at `https://<your-lan-ip>:4200`. Open that URL on the phone and trust/install the certificate once so the camera permission prompt can appear.
+
 ### Backend
 Uses NextJS + PostgreSQL with JWT as cookies.

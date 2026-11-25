@@ -5,17 +5,14 @@ describe('QrScannerComponent', () => {
   let fixture: ComponentFixture<QrScannerComponent>;
   let scanner: { start: ReturnType<typeof vi.fn>; destroy: ReturnType<typeof vi.fn> };
   let onDecode: (data: string) => void;
-  let hasCamera: ReturnType<typeof vi.fn>;
 
   beforeEach(async () => {
     scanner = { start: vi.fn(() => Promise.resolve()), destroy: vi.fn() };
-    hasCamera = vi.fn(() => Promise.resolve(true));
     await TestBed.configureTestingModule({
       imports: [QrScannerComponent],
       providers: [{
         provide: QR_SCANNER_FACTORY,
         useValue: {
-          hasCamera,
           create: (_video: HTMLVideoElement, decode: (data: string) => void) => {
             onDecode = decode;
             return scanner;
@@ -38,14 +35,14 @@ describe('QrScannerComponent', () => {
     expect(scanned).toHaveBeenCalledWith('bob');
   });
 
-  it('shows an error when no camera is available', async () => {
-    hasCamera.mockResolvedValue(false);
+  it('shows a helpful error when camera access is blocked', async () => {
+    scanner.start.mockRejectedValueOnce(new DOMException('denied', 'NotAllowedError'));
 
     fixture.detectChanges();
     await fixture.whenStable();
 
-    expect(fixture.componentInstance.error()).toContain('No camera');
-    expect(scanner.start).not.toHaveBeenCalled();
+    expect(fixture.componentInstance.error()).toContain('HTTPS');
+    expect(scanner.destroy).toHaveBeenCalled();
   });
 
   it('stops the camera when destroyed', async () => {
