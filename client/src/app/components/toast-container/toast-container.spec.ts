@@ -19,4 +19,11 @@ describe('ToastContainer', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('centers the toasts horizontally', () => {
+    const container = fixture.nativeElement.querySelector('.toast-container') as HTMLElement;
+    expect(container.classList.contains('start-50')).toBe(true);
+    expect(container.classList.contains('translate-middle-x')).toBe(true);
+    expect(container.classList.contains('end-0')).toBe(false);
+  });
 });
